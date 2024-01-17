@@ -88,9 +88,9 @@ const CreateNew = (props) => {
 
   const handleClear = (e) => {
     e.preventDefault()
-    content.fieldClear()
-    author.fieldClear()
-    info.fieldClear()
+    content.reset()
+    author.reset()
+    info.reset()
   }    
 
   return (
@@ -99,15 +99,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input { ...content } reset="" />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author} reset="" />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info} reset="" />
         </div>
         <button>create</button>
         <button onClick={handleClear}>reset</button>

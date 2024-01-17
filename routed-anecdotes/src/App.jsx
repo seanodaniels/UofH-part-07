@@ -86,6 +86,13 @@ const CreateNew = (props) => {
     })
   }
 
+  const handleClear = (e) => {
+    e.preventDefault()
+    content.fieldClear()
+    author.fieldClear()
+    info.fieldClear()
+  }    
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -103,6 +110,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleClear}>reset</button>
       </form>
     </div>
   )

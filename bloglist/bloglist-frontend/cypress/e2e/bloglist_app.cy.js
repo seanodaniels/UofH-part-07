@@ -1,18 +1,17 @@
+// Create a new blog list
 Cypress.Commands.add('createBloglist', ({ content, important }) => {
   cy.request({
     url: `${Cypress.env('BACKEND')}/api/blogs`,
     method: 'POST',
     body: { content, important },
     headers: {
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem('loggedBloglistUser')).token
-      }`,
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('loggedBloglistUser')).token}`,
     },
   })
-
   cy.visit('')
 })
 
+// Logging in
 Cypress.Commands.add('login', ({ username, password }) => {
   cy.request('POST', `${Cypress.env('BACKEND')}/api/login`, {
     username,
@@ -23,7 +22,9 @@ Cypress.Commands.add('login', ({ username, password }) => {
   })
 })
 
+// Primary Testing block for app
 describe('Blog app', function () {
+  // Reset db
   beforeEach(function () {
     cy.request('POST', `${Cypress.env('BACKEND')}/api/testing/reset`)
     cy.visit('')

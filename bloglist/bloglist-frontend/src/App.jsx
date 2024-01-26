@@ -8,8 +8,15 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogListForm from './components/BlogListForm'
 import ToggleBlogView from './components/ToggleBlogView'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBloglist } from './reducers/blogReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initializeBloglist())
+  }, [])
+  // console.log(store)
   const [blogs, setBlogs] = useState([])
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)

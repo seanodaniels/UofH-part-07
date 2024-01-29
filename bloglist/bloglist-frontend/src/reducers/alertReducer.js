@@ -2,26 +2,54 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const alertSlice = createSlice({
   name: 'alerts',
-  initialState: '',
+  initialState: [{
+    message: 'hi',
+    alertType: 'CLEAR',
+  }],
   reducers: {
-    setAlert(state, action) {
-      return action.payload
+    setNotification(state, action) {
+      const content = action.payload
+      return [{
+        message: content,
+        alertType: 'NOTIFICATION',
+      }]
+    },
+    setError(state, action) {
+      const content = action.payload
+      return [{
+        message: content,
+        alertType: 'ERROR',
+      }]
     },
     clearAlert(state, action) {
+      return [{
+        message: null,
+        alertType: 'CLEAR',
+      }]
     }
   }
 })
 
 export const {
-  setAlert,
+  setNotification,
+  setError,
   clearAlert
 } = alertSlice.actions
 
-export const createAlert = (content, timeOut = 3000) => {
+export const createNotification = (content, timeOut = 3000) => {
   return async dispatch => {
-    dispatch(setAlert(content))
+    dispatch(setNotification(content))
     setTimeout(() => {
-      dispatch(setAlert(null))
+      dispatch(clearAlert())
+    }, timeOut)
+  }
+}
+
+export const createError = (content, timeOut = 3000) => {
+  return async dispatch => {
+    dispatch(setError(content))
+    setTimeout(() => {
+      dispatch(clearAlert())
     }, timeOut)
   }
 }

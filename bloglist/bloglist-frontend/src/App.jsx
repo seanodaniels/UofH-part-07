@@ -2,21 +2,20 @@ import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Notification from './components/Notification'
-import ErrorMessage from './components/ErrorMessage'
+import Alert from './components/Alert'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogListForm from './components/BlogListForm'
 import ToggleBlogView from './components/ToggleBlogView'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBloglist } from './reducers/blogReducer'
-import { createAlert } from './reducers/alertReducer'
+import { createNotification, createError } from './reducers/alertReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     // dispatch(initializeBloglist())
-    dispatch(createAlert(null))
+    // dispatch(createNotification(null))
   }, [])
   // console.log(store)
   const [blogs, setBlogs] = useState([])
@@ -43,17 +42,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      // setNotificationMessage(`${user.username} logged in.`)
-      // setTimeout(() => {
-      //   setNotificationMessage(null)
-      // }, 5000)
-      dispatch(createAlert(`${user.username} logged in.`))
+      dispatch(createNotification(`${user.username} logged in.`))
     } catch (exception) {
-      // setErrorMessage('wrong username or password')
-      // setTimeout(() => {
-      //   setErrorMessage(null)
-      // }, 5000)
-      dispatch(createAlert('wrong username or password'))
+      dispatch(createError('wrong username or password'))
     }
   }
 
@@ -71,18 +62,10 @@ const App = () => {
           b.id !== id ? b : changedBlogListing
         )
         setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-        // setNotificationMessage(`${changedBlogListing.title} liked.`)
-        // setTimeout(() => {
-        //   setNotificationMessage(null)
-        // }, 5000)
-        dispatch(createAlert(`${changedBlogListing.title} liked!`))
+        dispatch(createNotification(`${changedBlogListing.title} liked!`))
       })
       .catch((e) => {
-        // setErrorMessage(`error with like on ${id}: ${e}`)
-        // setTimeout(() => {
-        //   setErrorMessage(null)
-        // }, 5000)
-        dispatch(createAlert(`error with like on ${id}: ${e}`))
+        dispatch(createError(`error with like on ${id}: ${e}`))
       })
   }
 
@@ -94,29 +77,17 @@ const App = () => {
         .then((o) => {
           const newBlogListing = blogs.filter((b) => b.id !== id)
           setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-          // setNotificationMessage('Blog deleted')
-          // setTimeout(() => {
-          //   setNotificationMessage(null)
-          // }, 5000)
-          dispatch(createAlert('Blog listing deleted.'))
+          dispatch(createNotification('Blog listing deleted.'))
         })
         .catch((e) => {
-          // setErrorMessage(`error with deletion of ${id}: ${e}`)
-          // setTimeout(() => {
-          //   setErrorMessage(null)
-          // }, 5000)
-          dispatch(createAlert(`error with deletion of ${id}: ${e}`))
+          dispatch(createError(`error with deletion of ${id}: ${e}`))
         })
     }
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
-    // setNotificationMessage(`${user.username} logged out.`)
-    // setTimeout(() => {
-    //   setNotificationMessage(null)
-    // }, 5000)
-    dispatch(createAlert(`${user.username} logged out.`))
+    dispatch(createNotification(`${user.username} logged out.`))
 
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
@@ -133,14 +104,12 @@ const App = () => {
         const addUserToBlog = { ...o, user: user } // add in missing user
         const blogsWithNewentry = blogs.concat(addUserToBlog)
         setBlogs(blogsWithNewentry.sort((a, b) => b.likes - a.likes))
-        // setNotificationMessage(`a new blog "${o.title}" by ${o.author} added`)
-        // setTimeout(() => {
-        //   setNotificationMessage(null)
-        // }, 5000)
-        dispatch(createAlert(`a new blog "${o.title}" by ${o.author} added`))
+        dispatch(
+          createNotification(`a new blog "${o.title}" by ${o.author} added`)
+        )
       })
       .catch((error) => {
-        console.log('CREATE ERROR:', error)
+        dispatch(createError(`ERROR: ${error}`))
       })
   }
 
@@ -219,13 +188,12 @@ const App = () => {
 
   // <Notification message={notificationMessage} />
 
-  const alertArea = useSelector((state) => state.alert)
-  console.log('state:', alertArea)
+  const alertMessage = useSelector((state) => state.alert[0].message)
+  const alertType = useSelector((state) => state.alert[0].alertType)
 
   return (
     <div>
-      <Notification message={alertArea} />
-      <ErrorMessage message={errorMessage} />
+      <Alert message={alertMessage} alertType={alertType} />
       <h2>blogs</h2>
       {user === null ? loginForm() : bloglistForm()}
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addBloglist } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/alertReducer'
@@ -9,16 +9,13 @@ const BlogListForm = ({ createBlog }) => {
   const [url, setUrl] = useState('')
   const [likes, setLikes] = useState('')
 
+  // const bloglistFormRef = useRef()
+
   const dispatch = useDispatch()
 
   const addBlogList = (event) => {
     event.preventDefault()
-    // createBlog({
-    //   title: title,
-    //   author: author,
-    //   url: url,
-    //   likes: 0,
-    // })
+    // bloglistFormRef.current.toggleVisibility()
     dispatch(
       addBloglist({
         title: event.target.blogTitle.value,

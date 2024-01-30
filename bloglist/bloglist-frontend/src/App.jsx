@@ -8,7 +8,11 @@ import Togglable from './components/Togglable'
 import BlogListForm from './components/BlogListForm'
 import ToggleBlogView from './components/ToggleBlogView'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBloglist } from './reducers/blogReducer'
+import {
+  initializeBloglist,
+  updateBloglist,
+  deleteBloglist,
+} from './reducers/blogReducer'
 import { createNotification, createError } from './reducers/alertReducer'
 
 const App = () => {
@@ -51,39 +55,46 @@ const App = () => {
   }
 
   const handleLikeSubmit = (id) => {
-    const currentBloglist = blogs.find((b) => b.id === id)
-    const changedBlogListing = {
+    const currentBloglist = blogs1.find((b) => b.id === id)
+    const changedBloglist = {
       ...currentBloglist,
       likes: currentBloglist.likes + 1,
     }
+    dispatch(updateBloglist(changedBloglist))
+    dispatch(createNotification(`${changedBloglist.title} liked!`))
 
-    blogService
-      .update(id, changedBlogListing)
-      .then((o) => {
-        const newBlogListing = blogs.map((b) =>
-          b.id !== id ? b : changedBlogListing
-        )
-        setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-        dispatch(createNotification(`${changedBlogListing.title} liked!`))
-      })
-      .catch((e) => {
-        dispatch(createError(`error with like on ${id}: ${e}`))
-      })
+    // blogService
+    //   .update(id, changedBloglist)
+    //   .then((o) => {
+    //     const newBlogListing = blogs1.map((b) =>
+    //       b.id !== id ? b : changedBloglist
+    //     )
+    //     // setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
+    //     console.log('nbl:', newBlogListing)
+    //     dispatch(updateBloglist(newBlogListing))
+    //     dispatch(createNotification(`${changedBloglist.title} liked!`))
+    //   })
+    //   .catch((e) => {
+    //     dispatch(createError(`error with like on ${id}: ${e}`))
+    //   })
   }
 
   const handleDeleteSubmit = (id) => {
-    let confirmDelete = `Remove blog "${blogs.find((b) => b.id === id).title}"`
+    let confirmDelete = `Remove blog "${blogs1.find((b) => b.id === id).title}"`
+
     if (window.confirm(confirmDelete)) {
-      blogService
-        .deleteBloglist(id)
-        .then((o) => {
-          const newBlogListing = blogs.filter((b) => b.id !== id)
-          setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-          dispatch(createNotification('Blog listing deleted.'))
-        })
-        .catch((e) => {
-          dispatch(createError(`error with deletion of ${id}: ${e}`))
-        })
+      dispatch(deleteBloglist(id))
+      dispatch(createNotification('Blog listing deleted.'))
+      // blogService
+      //   .deleteBloglist(id)
+      //   .then((o) => {
+      //     const newBlogListing = blogs.filter((b) => b.id !== id)
+      //     setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
+      //     dispatch(createNotification('Blog listing deleted.'))
+      //   })
+      //   .catch((e) => {
+      //     dispatch(createError(`error with deletion of ${id}: ${e}`))
+      //   })
     }
   }
 

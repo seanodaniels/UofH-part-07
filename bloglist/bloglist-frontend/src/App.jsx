@@ -27,6 +27,8 @@ const App = () => {
 
   const bloglistFormRef = useRef()
 
+  const blogs1 = useSelector((state) => state.blogs)
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -95,37 +97,19 @@ const App = () => {
     setPassword('')
   }
 
-  const addBloglist = (blogObject) => {
-    bloglistFormRef.current.toggleVisibility()
-
-    blogService
-      .create(blogObject)
-      .then((o) => {
-        const addUserToBlog = { ...o, user: user } // add in missing user
-        const blogsWithNewentry = blogs.concat(addUserToBlog)
-        setBlogs(blogsWithNewentry.sort((a, b) => b.likes - a.likes))
-        dispatch(
-          createNotification(`a new blog "${o.title}" by ${o.author} added`)
-        )
-      })
-      .catch((error) => {
-        dispatch(createError(`ERROR: ${error}`))
-      })
-  }
-
   useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [])
+    // blogService
+    //   .getAll()
+    //   .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
 
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
     }
+
+    dispatch(initializeBloglist())
   }, [])
 
   const loginForm = () => {
@@ -157,17 +141,13 @@ const App = () => {
         </div>
 
         <div className="blogListElement">
-          <Togglable
-            className="add-new"
-            buttonLabel="add new blog listing"
-            ref={bloglistFormRef}
-          >
-            <BlogListForm createBlog={addBloglist} />
+          <Togglable className="add-new" buttonLabel="add new blog listing">
+            <BlogListForm />
           </Togglable>
         </div>
 
         <div id="list-of-blogs">
-          {blogs.map((blog) => {
+          {blogs1.map((blog) => {
             return (
               <div key={blog.id} className="blogListElement listing">
                 <div className="blogShowElement">

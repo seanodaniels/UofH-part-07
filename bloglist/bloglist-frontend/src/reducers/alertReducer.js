@@ -36,7 +36,7 @@ export const {
   clearAlert
 } = alertSlice.actions
 
-export const createNotification = (content, timeOut = 3000) => {
+export const createNotification = (content, timeOut = 5000) => {
   return async dispatch => {
     dispatch(setNotification(content))
     setTimeout(() => {
@@ -45,7 +45,7 @@ export const createNotification = (content, timeOut = 3000) => {
   }
 }
 
-export const createError = (content, timeOut = 3000) => {
+export const createError = (content, timeOut = 5000) => {
   return async dispatch => {
     dispatch(setError(content))
     setTimeout(() => {

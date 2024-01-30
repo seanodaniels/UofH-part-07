@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { addBloglist } from '../reducers/blogReducer'
+import { createNotification } from '../reducers/alertReducer'
 
 const BlogListForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -6,14 +9,29 @@ const BlogListForm = ({ createBlog }) => {
   const [url, setUrl] = useState('')
   const [likes, setLikes] = useState('')
 
+  const dispatch = useDispatch()
+
   const addBlogList = (event) => {
     event.preventDefault()
-    createBlog({
-      title: title,
-      author: author,
-      url: url,
-      likes: 0,
-    })
+    // createBlog({
+    //   title: title,
+    //   author: author,
+    //   url: url,
+    //   likes: 0,
+    // })
+    dispatch(
+      addBloglist({
+        title: event.target.blogTitle.value,
+        author: event.target.blogAuthor.value,
+        url: event.target.blogUrl.value,
+        likes: 0,
+      })
+    )
+    dispatch(
+      createNotification(
+        `a new blog "${event.target.blogTitle.value}" by ${event.target.blogAuthor.value} added`
+      )
+    )
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -28,6 +46,7 @@ const BlogListForm = ({ createBlog }) => {
         <input
           className="new-title"
           value={title}
+          name="blogTitle"
           onChange={(event) => setTitle(event.target.value)}
         />
         <br />
@@ -35,6 +54,7 @@ const BlogListForm = ({ createBlog }) => {
         <input
           className="new-author"
           value={author}
+          name="blogAuthor"
           onChange={(event) => setAuthor(event.target.value)}
         />
         <br />
@@ -42,6 +62,7 @@ const BlogListForm = ({ createBlog }) => {
         <input
           className="new-url"
           value={url}
+          name="blogUrl"
           onChange={(event) => setUrl(event.target.value)}
         />
         <br />

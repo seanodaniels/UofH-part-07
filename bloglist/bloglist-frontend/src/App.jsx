@@ -14,9 +14,11 @@ import {
   deleteBloglist,
 } from './reducers/blogReducer'
 import { createNotification, createError } from './reducers/alertReducer'
+import { userSet } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
+
   useEffect(() => {
     // dispatch(initializeBloglist())
     // dispatch(createNotification(null))
@@ -48,9 +50,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      dispatch(userSet(user))
       dispatch(createNotification(`${user.username} logged in.`))
     } catch (exception) {
-      dispatch(createError('wrong username or password'))
+      dispatch(createError(`wrong username or password: ${exception}`, 10000))
     }
   }
 
@@ -117,6 +120,8 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      dispatch(userSet(user))
+      console.log('hit from app.jsx', user)
       blogService.setToken(user.token)
     }
 

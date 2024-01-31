@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const ToggleBlogView = ({
   blog,
@@ -10,6 +11,8 @@ const ToggleBlogView = ({
 
   const showSummary = { display: show ? '' : 'none' }
   const hideSummary = { display: show ? 'none' : '' }
+
+  const currentUser = useSelector((state) => state.user)
 
   const testingThing = () => {
     return (
@@ -59,7 +62,7 @@ const ToggleBlogView = ({
         <br />
         <span className="blog-username">{blog.user.username}</span>
         <br />
-        {currentUsername === blog.user.username ? testingThing() : null}
+        {currentUser.username === blog.user.username ? testingThing() : null}
       </div>
     </div>
   )

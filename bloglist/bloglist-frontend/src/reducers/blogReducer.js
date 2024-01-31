@@ -40,11 +40,15 @@ export const initializeBloglist = () => {
   }
 }
 
-export const addBloglist = (content) => {
-  console.log('content:', content)
+export const addBloglist = (blogListObject, currentUser) => {
   return async dispatch => {
-    const newBloglist = await bloglistService.create(content)
-    dispatch(appendBloglist(newBloglist))
+    const newBloglist = await bloglistService.create(blogListObject)
+    // Replace received user string value with the user store object
+    const newBloglistWithUser = {
+      ...newBloglist,
+      user: currentUser
+    }
+    dispatch(appendBloglist(newBloglistWithUser))
   }
 }
 

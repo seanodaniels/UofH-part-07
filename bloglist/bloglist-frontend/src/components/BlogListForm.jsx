@@ -12,17 +12,21 @@ const BlogListForm = ({ createBlog }) => {
   // const bloglistFormRef = useRef()
 
   const dispatch = useDispatch()
+  const currentUser = useSelector((state) => state.user)
 
   const addBlogList = (event) => {
     event.preventDefault()
     // bloglistFormRef.current.toggleVisibility()
     dispatch(
-      addBloglist({
-        title: event.target.blogTitle.value,
-        author: event.target.blogAuthor.value,
-        url: event.target.blogUrl.value,
-        likes: 0,
-      })
+      addBloglist(
+        {
+          title: event.target.blogTitle.value,
+          author: event.target.blogAuthor.value,
+          url: event.target.blogUrl.value,
+          likes: 0,
+        },
+        currentUser
+      )
     )
     dispatch(
       createNotification(

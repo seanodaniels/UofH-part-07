@@ -19,21 +19,12 @@ import { userSet } from './reducers/userReducer'
 const App = () => {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    // dispatch(initializeBloglist())
-    // dispatch(createNotification(null))
-  }, [])
-  // console.log(store)
-  const [blogs, setBlogs] = useState([])
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
-  const bloglistFormRef = useRef()
-
-  const blogs1 = useSelector((state) => state.blogs)
+  const blogListsRaw = useSelector((state) => state.blogs)
+  const blogLists = blogListsRaw.toSorted((a, b) => b.likes - a.likes)
+  const currentUser = useSelector((state) => state.user)
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -47,10 +38,9 @@ const App = () => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
 
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(userSet(user))
       setUsername('')
       setPassword('')
-      dispatch(userSet(user))
       dispatch(createNotification(`${user.username} logged in.`))
     } catch (exception) {
       dispatch(createError(`wrong username or password: ${exception}`, 10000))
@@ -58,70 +48,50 @@ const App = () => {
   }
 
   const handleLikeSubmit = (id) => {
-    const currentBloglist = blogs1.find((b) => b.id === id)
+    const currentBloglist = blogLists.find((b) => b.id === id)
     const changedBloglist = {
       ...currentBloglist,
       likes: currentBloglist.likes + 1,
     }
-    dispatch(updateBloglist(changedBloglist))
-    dispatch(createNotification(`${changedBloglist.title} liked!`))
-
-    // blogService
-    //   .update(id, changedBloglist)
-    //   .then((o) => {
-    //     const newBlogListing = blogs1.map((b) =>
-    //       b.id !== id ? b : changedBloglist
-    //     )
-    //     // setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-    //     console.log('nbl:', newBlogListing)
-    //     dispatch(updateBloglist(newBlogListing))
-    //     dispatch(createNotification(`${changedBloglist.title} liked!`))
-    //   })
-    //   .catch((e) => {
-    //     dispatch(createError(`error with like on ${id}: ${e}`))
-    //   })
+    try {
+      dispatch(updateBloglist(changedBloglist, currentUser))
+      dispatch(createNotification(`${changedBloglist.title} liked!`))
+    } catch (exception) {
+      console.log('hit')
+      dispatch(createError(`problem liking item: ${exception}`))
+    }
   }
 
   const handleDeleteSubmit = (id) => {
-    let confirmDelete = `Remove blog "${blogs1.find((b) => b.id === id).title}"`
+    let confirmDelete = `Remove blog "${
+      blogLists.find((b) => b.id === id).title
+    }"`
 
     if (window.confirm(confirmDelete)) {
-      dispatch(deleteBloglist(id))
-      dispatch(createNotification('Blog listing deleted.'))
-      // blogService
-      //   .deleteBloglist(id)
-      //   .then((o) => {
-      //     const newBlogListing = blogs.filter((b) => b.id !== id)
-      //     setBlogs(newBlogListing.sort((a, b) => b.likes - a.likes))
-      //     dispatch(createNotification('Blog listing deleted.'))
-      //   })
-      //   .catch((e) => {
-      //     dispatch(createError(`error with deletion of ${id}: ${e}`))
-      //   })
+      try {
+        dispatch(deleteBloglist(id))
+        dispatch(createNotification('Blog listing deleted.'))
+      } catch (exception) {
+        dispatch(createError(`problem deleting item: ${exception}`))
+      }
     }
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
-    dispatch(createNotification(`${user.username} logged out.`))
-
+    dispatch(createNotification(`${currentUser.username} logged out.`))
     window.localStorage.removeItem('loggedBloglistUser')
-    setUser(null)
+    dispatch(userSet(null))
     setUsername('')
     setPassword('')
   }
 
   useEffect(() => {
-    // blogService
-    //   .getAll()
-    //   .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      // setUser(user)
       dispatch(userSet(user))
-      console.log('hit from app.jsx', user)
       blogService.setToken(user.token)
     }
 
@@ -148,7 +118,7 @@ const App = () => {
     return (
       <div>
         <div className="loginBox">
-          {user.name} logged in
+          {currentUser.name} logged in
           <form onSubmit={handleLogout}>
             <button className="login-logout" type="submit">
               logout
@@ -163,13 +133,12 @@ const App = () => {
         </div>
 
         <div id="list-of-blogs">
-          {blogs1.map((blog) => {
+          {blogLists.map((blog) => {
             return (
               <div key={blog.id} className="blogListElement listing">
                 <div className="blogShowElement">
                   <ToggleBlogView
                     blog={blog}
-                    currentUsername={user.username}
                     handleLikeSubmit={() => handleLikeSubmit(blog.id)}
                     handleDeleteSubmit={() => handleDeleteSubmit(blog.id)}
                   />
@@ -182,8 +151,6 @@ const App = () => {
     )
   }
 
-  // <Notification message={notificationMessage} />
-
   const alertMessage = useSelector((state) => state.alert[0].message)
   const alertType = useSelector((state) => state.alert[0].alertType)
 
@@ -191,7 +158,7 @@ const App = () => {
     <div>
       <Alert message={alertMessage} alertType={alertType} />
       <h2>blogs</h2>
-      {user === null ? loginForm() : bloglistForm()}
+      {currentUser === null ? loginForm() : bloglistForm()}
     </div>
   )
 }

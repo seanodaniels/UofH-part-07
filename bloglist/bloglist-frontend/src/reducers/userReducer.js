@@ -2,10 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const userSlice = createSlice({
   name: 'currentUser',
-  initialState: {},
+  initialState: null,
   reducers: {
     userSet(state, action) {
-      console.log('hit from userReducer')
       return action.payload
     }
   }

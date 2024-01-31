@@ -4,13 +4,12 @@ import { addBloglist } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/alertReducer'
 
 const BlogListForm = ({ createBlog }) => {
+  // Control form entry
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [likes, setLikes] = useState('')
 
-  // const bloglistFormRef = useRef()
-
+  // Store Stuff
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user)
 
@@ -36,7 +35,6 @@ const BlogListForm = ({ createBlog }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    setLikes('')
   }
 
   return (

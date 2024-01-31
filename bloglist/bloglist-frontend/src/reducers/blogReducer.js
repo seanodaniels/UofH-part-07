@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 import bloglistService from '../services/blogs'
 
 const blogSlice = createSlice({
@@ -30,12 +31,9 @@ export const {
 } = blogSlice.actions
 
 export const initializeBloglist = () => {
-  // do getall on db
-  // do a setBloglist(results)
   return async dispatch => {
     const allTheBloglists = await bloglistService
       .getAll()
-    //.then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
     dispatch(setBloglist(allTheBloglists))
   }
 }
@@ -52,11 +50,15 @@ export const addBloglist = (blogListObject, currentUser) => {
   }
 }
 
-export const updateBloglist = (bloglist) => {
+export const updateBloglist = (bloglist, currentUser) => {
   return async dispatch => {
     const id = bloglist.id
     const updatedBloglist = await bloglistService.update(id, bloglist)
-    dispatch(changeBloglist(updatedBloglist))
+    const updatedBloglistWithUser = {
+      ...updatedBloglist,
+      user: currentUser
+    }
+    dispatch(changeBloglist(updatedBloglistWithUser))
   }
 }
 

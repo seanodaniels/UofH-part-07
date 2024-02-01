@@ -1,4 +1,9 @@
-const Alert = ({ message, alertType = 'notification' }) => {
+import { useSelector } from 'react-redux'
+
+const Alert = ({ message, type = 'NOTIFICATION' }) => {
+  const alertMessage = useSelector((state) => state.alert[0].message)
+  const alertType = useSelector((state) => state.alert[0].type)
+
   let alertCSS = ''
   switch (alertType) {
     case 'NOTIFICATION':
@@ -16,7 +21,7 @@ const Alert = ({ message, alertType = 'notification' }) => {
     return null
   }
 
-  return <div className={alertCSS}>{message}</div>
+  return <div className={alertCSS}>{alertMessage}</div>
 }
 
 export default Alert

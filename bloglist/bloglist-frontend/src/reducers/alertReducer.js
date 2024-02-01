@@ -4,27 +4,27 @@ const alertSlice = createSlice({
   name: 'alerts',
   initialState: [{
     message: 'hi',
-    alertType: 'CLEAR',
+    type: 'CLEAR',
   }],
   reducers: {
     setNotification(state, action) {
       const content = action.payload
       return [{
         message: content,
-        alertType: 'NOTIFICATION',
+        type: 'NOTIFICATION',
       }]
     },
     setError(state, action) {
       const content = action.payload
       return [{
         message: content,
-        alertType: 'ERROR',
+        type: 'ERROR',
       }]
     },
     clearAlert(state, action) {
       return [{
         message: null,
-        alertType: 'CLEAR',
+        type: 'CLEAR',
       }]
     }
   }

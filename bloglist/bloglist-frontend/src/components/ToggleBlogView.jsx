@@ -1,12 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-const ToggleBlogView = ({
-  blog,
-  currentUsername,
-  handleLikeSubmit,
-  handleDeleteSubmit,
-}) => {
+const ToggleBlogView = ({ blog, handleLikeSubmit, handleDeleteSubmit }) => {
   const [show, setShow] = useState(false)
 
   const showSummary = { display: show ? '' : 'none' }

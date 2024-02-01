@@ -3,9 +3,13 @@ body {
   background-color: #222;
 }
 
+a {
+  color: #aaaa00;
+}
+
 h1 {
-  color: green;
-  font-style: italic;
+  color: #ffffff;
+  font-style: bold;
 }
 
 .note {
@@ -22,6 +26,14 @@ button {
 input {
   background-color: #999;
   border-color: #666;
+}
+
+.hide-create {
+  margin: 1em 0;
+}
+
+.show-create {
+  margin-bottom: 1em;
 }
 
 .error {
@@ -53,6 +65,13 @@ input {
 
 .blogListElement {
   margin: 0 0 1em 0;
+}
+
+.blogCreate {
+  border: 1px solid #fff;
+  padding: 0.5em;
+  margin: 0 0 0.5em 0;
+  background-color: #333333;
 }
 
 .blogShowElement {

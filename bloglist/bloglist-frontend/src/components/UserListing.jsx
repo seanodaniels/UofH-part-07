@@ -12,19 +12,25 @@ const UserListing = () => {
     <div id="user-listing">
       <h2>Users</h2>
       <table className="user-listing">
-        <tr>
-          <th>User</th>
-          <th>Blogs Created</th>
-        </tr>
-        {users.map((u) => {
-          const numBloglistings = u.blogs.length
-          return (
-            <tr key={u.username}>
-              <td>{u.username}</td>
-              <td>{numBloglistings}</td>
-            </tr>
-          )
-        })}
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Blogs Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => {
+            const numBloglistings = u.blogs.length
+            return (
+              <tr key={u.username}>
+                <td>
+                  <Link to={`/users/${u.id}`}>{u.username}</Link>
+                </td>
+                <td>{numBloglistings}</td>
+              </tr>
+            )
+          })}
+        </tbody>
       </table>
     </div>
   )

@@ -11,6 +11,7 @@ import BloglistListing from './components/BloglistListing'
 import Alert from './components/Alert'
 import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
+import UserDetails from './components/UserDetails'
 import UserListing from './components/UserListing'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBloglist } from './reducers/blogReducer'
@@ -32,13 +33,6 @@ const App = () => {
     dispatch(initializeUsers())
   }, [])
 
-  // const bloglists = useSelector((state) => state.blogs)
-
-  // const match = useMatch('/bloglist/:id')
-  // const bloglist = match
-  //   ? bloglists.find((b) => b.id === match.params.id)
-  //   : null
-
   return (
     <div id="bloglist-body">
       <div className="nav">
@@ -50,6 +44,7 @@ const App = () => {
       <LoginForm />
       <Routes>
         <Route path="/bloglist/:id" element={<Bloglist />} />
+        <Route path="/users/:id" element={<UserDetails />} />
         <Route path="/users" element={<UserListing />} />
         <Route path="/" element={<BloglistListing />} />
       </Routes>

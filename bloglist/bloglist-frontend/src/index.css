@@ -1,6 +1,8 @@
 body {
   color: #ddd;
   background-color: #222;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -10,6 +12,10 @@ a {
 h1 {
   color: #ffffff;
   font-style: bold;
+}
+
+.main-content {
+  padding: 0 1em 1em 1em;
 }
 
 .note {
@@ -43,6 +49,27 @@ table.user-listing tr th {
   padding: 0.25em 0.5em;
   text-align: left;
   background-color: #333333;
+}
+
+div#app-login {
+  border-left: 1px solid #999999;
+  padding-left: 1em;
+  display: inline;
+  margin-left: 0.5em;
+}
+
+div#app-login form {
+  display: inline;
+  margin-left: 0.5em;
+}
+
+div#app-login form input {
+  margin: 0 1em 0 0.25em;
+}
+
+div.nav {
+  background-color: #333333;
+  padding: 0.25em 0.5em 0.5em 0.75em;
 }
 
 .nav a {

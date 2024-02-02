@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBloglist, deleteBloglist } from '../reducers/blogReducer'
 import { createNotification, createError } from '../reducers/alertReducer'
-import { useMatch } from 'react-router-dom'
+import { useMatch, Link } from 'react-router-dom'
 
 const Bloglist = () => {
   const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const Bloglist = () => {
     ? bloglists.find((b) => b.id === match.params.id)
     : null
 
-  const testingThing = () => {
+  const deleteForm = () => {
     return (
       <button
         className="button-delete"
@@ -59,25 +59,30 @@ const Bloglist = () => {
 
   return (
     <div>
-      <span className="blog-title">{bloglist.title}</span> by{' '}
-      <span className="blog-author">{bloglist.author}</span>
+      <h3>
+        <span className="blog-title">{bloglist.title}</span> by{' '}
+        <span className="blog-author">{bloglist.author}</span>
+      </h3>
       <div className="bloglist-detail">
-        <span className="blog-url">{bloglist.url}</span>
-        <br />
-        <span className="blog-likes">{bloglist.likes} likes</span>
-        <button
-          onClick={handleLikeSubmit}
-          className="button-like"
-          type="submit"
-        >
-          Like
-        </button>
-        <br />
-        <span className="blog-username">added by {bloglist.user.username}</span>
-        <br />
-        {currentUser.username === bloglist.user.username
-          ? testingThing()
-          : null}
+        <p>
+          <span className="blog-url">
+            <Link to={bloglist.url}>{bloglist.url}</Link>
+          </span>
+          <br />
+          <span className="blog-likes">{bloglist.likes} likes</span>
+          <button
+            onClick={handleLikeSubmit}
+            className="button-like"
+            type="submit"
+          >
+            Like
+          </button>
+          <br />
+          <span className="blog-username">
+            added by {bloglist.user.username}
+          </span>
+        </p>
+        {currentUser.username === bloglist.user.username ? deleteForm() : null}
       </div>
     </div>
   )

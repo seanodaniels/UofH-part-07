@@ -19,7 +19,9 @@ const BloglistListing = () => {
               className="blogListElement blogShowElement listing"
             >
               <Link to={`/bloglist/${blog.id}`}>{blog.title}</Link>{' '}
-              <em>by {blog.author}</em>
+              <em>
+                by <Link to={`/users/${blog.user.id}`}>{blog.author}</Link>
+              </em>
             </div>
           )
         })}

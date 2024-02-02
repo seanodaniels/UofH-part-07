@@ -32,7 +32,7 @@ const LoginForm = () => {
 
   if (currentUser !== null) {
     return (
-      <div className="loginBox">
+      <div id="app-login">
         {currentUser.name} logged in
         <form onSubmit={handleLogout}>
           <button className="login-logout" type="submit">
@@ -43,17 +43,17 @@ const LoginForm = () => {
     )
   } else {
     return (
-      <div>
-        <h2>Log in to application</h2>
+      <div id="app-login">
+        log in:
         <form onSubmit={handleLogin}>
-          <div>
+          <span>
             username
             <input type="text" name="username" className="login-username" />
-          </div>
-          <div>
+          </span>
+          <span>
             password
             <input type="password" name="password" className="login-password" />
-          </div>
+          </span>
           <button className="login-submit" type="submit">
             login
           </button>

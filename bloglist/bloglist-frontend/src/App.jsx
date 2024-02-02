@@ -13,6 +13,7 @@ import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
 import UserDetails from './components/UserDetails'
 import UserListing from './components/UserListing'
+import NeedLogin from './components/NeedLogin'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBloglist } from './reducers/blogReducer'
 import { userSet } from './reducers/userReducer'
@@ -33,21 +34,29 @@ const App = () => {
     dispatch(initializeUsers())
   }, [])
 
+  const currentUser = useSelector((state) => state.user)
+
   return (
     <div id="bloglist-body">
       <div className="nav">
         <Link to="/">blogs</Link>
         <Link to="/users">users</Link>
+        <LoginForm />
       </div>
       <Alert />
-      <h1>Bloglist</h1>
-      <LoginForm />
-      <Routes>
-        <Route path="/bloglist/:id" element={<Bloglist />} />
-        <Route path="/users/:id" element={<UserDetails />} />
-        <Route path="/users" element={<UserListing />} />
-        <Route path="/" element={<BloglistListing />} />
-      </Routes>
+      <div className="main-content">
+        <h1>Bloglist</h1>
+        {currentUser ? (
+          <Routes>
+            <Route path="/bloglist/:id" element={<Bloglist />} />
+            <Route path="/users/:id" element={<UserDetails />} />
+            <Route path="/users" element={<UserListing />} />
+            <Route path="/" element={<BloglistListing />} />
+          </Routes>
+        ) : (
+          <NeedLogin />
+        )}
+      </div>
     </div>
   )
 }

@@ -28,6 +28,27 @@ input {
   border-color: #666;
 }
 
+table.user-listing,
+th,
+td {
+  border: 1px solid #666666;
+  border-collapse: collapse;
+}
+
+table.user-listing tr td {
+  padding: 0.25em 0.5em;
+}
+
+table.user-listing tr th {
+  padding: 0.25em 0.5em;
+  text-align: left;
+  background-color: #333333;
+}
+
+.nav a {
+  margin-right: 0.5em;
+}
+
 .hide-create {
   margin: 1em 0;
 }

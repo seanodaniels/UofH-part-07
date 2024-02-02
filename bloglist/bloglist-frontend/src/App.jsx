@@ -11,9 +11,11 @@ import BloglistListing from './components/BloglistListing'
 import Alert from './components/Alert'
 import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
+import UserListing from './components/UserListing'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBloglist } from './reducers/blogReducer'
 import { userSet } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -27,6 +29,7 @@ const App = () => {
     }
 
     dispatch(initializeBloglist())
+    dispatch(initializeUsers())
   }, [])
 
   // const bloglists = useSelector((state) => state.blogs)
@@ -40,12 +43,14 @@ const App = () => {
     <div id="bloglist-body">
       <div className="nav">
         <Link to="/">blogs</Link>
+        <Link to="/users">users</Link>
       </div>
       <Alert />
       <h1>Bloglist</h1>
       <LoginForm />
       <Routes>
         <Route path="/bloglist/:id" element={<Bloglist />} />
+        <Route path="/users" element={<UserListing />} />
         <Route path="/" element={<BloglistListing />} />
       </Routes>
     </div>

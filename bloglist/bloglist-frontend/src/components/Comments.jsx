@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { addComment } from '../reducers/commentReducer'
+import { createNotification } from '../reducers/alertReducer'
 
 const Comments = (content) => {
   const allComments = useSelector((state) => state.comments)
@@ -21,6 +22,7 @@ const Comments = (content) => {
         bloglistId: bloglistId,
       })
     )
+    dispatch(createNotification('Comment Added.'))
   }
 
   const AddComment = () => {

@@ -65,7 +65,6 @@ blogsRouter.post('/:id/comment', middleware.userExtractor, async (request, respo
   }
 })
 
-
 // Delete bloglist
 blogsRouter.delete(
   '/:id',

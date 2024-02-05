@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import bloglistService from '../services/blogs'
+import commentService from '../services/comments'
 
 const blogSlice = createSlice({
   name: 'bloglist',
@@ -19,7 +20,7 @@ const blogSlice = createSlice({
     },
     setBloglist(state, action) {
       return action.payload
-    },
+    }
   }
 })
 
@@ -65,8 +66,13 @@ export const updateBloglist = (bloglist, currentUser) => {
 export const deleteBloglist = (id) => {
   return async dispatch => {
     const response = await bloglistService.deleteBloglist(id)
-    console.log('response:', response)
     dispatch(removeBloglist(id))
+  }
+}
+
+export const addComment = (comment, id) => {
+  return async dispatch => {
+    const response = await commentService.create(comment, id)
   }
 }
 

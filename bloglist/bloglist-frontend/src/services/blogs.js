@@ -20,6 +20,18 @@ const create = async (newObject) => {
   return response.data
 }
 
+const createComment = async (comment) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  console.log('content', comment.content)
+  console.log('id', comment.bloglistId)
+  const addCommentUrl = `/api/blogs/${comment.bloglistId}/comment`
+  console.log('addcommenturl', addCommentUrl)
+  const response = await axios.post(addCommentUrl, comment, config)
+  return response.data
+}
+
 const update = (id, newObject) => {
   const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then((r) => r.data)
@@ -39,4 +51,5 @@ export default {
   create,
   update,
   deleteBloglist,
+  createComment,
 }

@@ -52,6 +52,24 @@ const Bloglist = () => {
     }
   }
 
+  const Comments = () => {
+    const allComments = useSelector((state) => state.comments)
+    const bloglistId = match.params.id
+    const thisComments = allComments.filter((c) => c.bloglistId === bloglistId)
+    if (thisComments.length > 0) {
+      return (
+        <div id="comments">
+          <h4>Comments</h4>
+          <ul>
+            {thisComments.map((c) => {
+              return <li key={c.id}>{c.content}</li>
+            })}
+          </ul>
+        </div>
+      )
+    }
+  }
+
   // Prevent re-rendering if the user refreshes the browser
   if (!bloglist) {
     return null
@@ -84,6 +102,7 @@ const Bloglist = () => {
         </p>
         {currentUser.username === bloglist.user.username ? deleteForm() : null}
       </div>
+      <Comments />
     </div>
   )
 

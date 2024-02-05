@@ -4,6 +4,7 @@ import blogReducer from './reducers/blogReducer'
 import alertReducer from './reducers/alertReducer'
 import userReducer from './reducers/userReducer'
 import usersReducer from './reducers/usersReducer'
+import commentReducer from './reducers/commentReducer'
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     alert: alertReducer,
     user: userReducer,
     users: usersReducer,
+    comments: commentReducer
   },
 })
 

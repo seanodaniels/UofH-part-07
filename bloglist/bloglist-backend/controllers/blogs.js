@@ -2,6 +2,7 @@ const middleware = require('../utils/middleware')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 // BEGIN ROUTES
@@ -38,6 +39,34 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   }
 })
 
+// Create new comment
+blogsRouter.post('/:id/comment', middleware.userExtractor, async (request, response) => {
+  const body = request.body
+  const bloglist = await Blog.findById(request.params.id)
+
+  console.log('bloglist', bloglist)
+
+  if (body.content) {
+    const comment = new Comment({
+      content: body.content,
+      bloglistId: request.params.id,
+    })
+
+    const savedComment = await comment.save()
+    bloglist.comment = bloglist.comment.concat(savedComment._id)
+    await bloglist.save()
+
+    response.status(201).json(savedComment)
+  } else {
+    const errorMessage = !body.comment ? `Missing comment` : `Error`
+
+    console.log(errorMessage)
+    response.status(400).end()
+  }
+})
+
+
+// Delete bloglist
 blogsRouter.delete(
   '/:id',
   middleware.userExtractor,
@@ -56,6 +85,7 @@ blogsRouter.delete(
   }
 )
 
+// Modify bloglist
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
@@ -71,6 +101,7 @@ blogsRouter.put('/:id', async (request, response) => {
   })
   response.json(updateBlog)
 })
+
 
 // END ROUTES
 

@@ -15,9 +15,10 @@ import UserDetails from './components/UserDetails'
 import UserListing from './components/UserListing'
 import NeedLogin from './components/NeedLogin'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBloglist } from './reducers/blogReducer'
 import { userSet } from './reducers/userReducer'
+import { initializeBloglist } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
+import { initializeComments } from './reducers/commentReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,6 +33,7 @@ const App = () => {
 
     dispatch(initializeBloglist())
     dispatch(initializeUsers())
+    dispatch(initializeComments())
   }, [])
 
   const currentUser = useSelector((state) => state.user)
